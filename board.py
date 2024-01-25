@@ -2,7 +2,7 @@ class Board:
     def __init__(self):
         self.board = [
             ["1", "2", "3"],
-            ["4", "X", "6"],
+            ["4", "5", "6"],
             ["7", "8", "9"]
         ]
 
@@ -22,7 +22,7 @@ class Board:
         board_str += "|" + " " * 7 + "|" + " " * 7 + "|" + " " * 7 + "|" + "\n"
         board_str += "|" + " " * 3 + self.board[2][0] + " " * 3 + "|" + " " * 3 + self.board[2][1] + " " * 3 + "|" + " " * 3 + self.board[2][2] + " " * 3 + "|" + "\n" # third row
         board_str += "|" + " " * 7 + "|" + " " * 7 + "|" + " " * 7 + "|" + "\n"
-        board_str += "+" + "-" * 7 + "+" + "-" * 7 + "+" + "-" * 7 + "+"
+        board_str += "+" + "-" * 7 + "+" + "-" * 7 + "+" + "-" * 7 + "+" + "\n"
         print(board_str)
 
     def make_list_of_free_cells(self):

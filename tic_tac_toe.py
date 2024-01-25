@@ -1,4 +1,6 @@
 from board import Board
+from player import Player
+from computer_player import ComputerPlayer
 import random
 
 class TicTacToe:
@@ -6,34 +8,10 @@ class TicTacToe:
         self.board = Board()
         self.turn = 1 # User is odd turns
         self.victory = False
+        self.player1 = None # this will hold player one
+        self.player2 = None # this will hold player two
 
-
-    def user_move(self):
-        # The function accepts the board's current status, asks the user about their move, 
-        # checks the input, and updates the board according to the user's decision.
-        board = self.board
-
-        free_cells = board.make_list_of_free_cells()
-        index = int(input("Enter your move: "))
-        
-        while index not in free_cells:
-            print("That is not a valid move")
-            index = int(input("Enter your move: "))
-
-        r,c = board.index_to_coords(index)
-        board.board[r][c] = "O"
-        return True
-
-
-    def computer_move(self):
-        # The function draws the computer's move and updates the board.
-        board = self.board
-
-        free_cells = board.make_list_of_free_cells()
-        index = random.choice(free_cells)
-        r,c = board.index_to_coords(index)
-        board.board[r][c] = "X"
-        return True
+        # to do: make a game with more than two players
 
 
     def check_victory(self, sign):
@@ -71,16 +49,64 @@ class TicTacToe:
         
         return False
 
+    
+    def initalize_players(self):
+        # First Player (always the user) #
+        name = input("Please enter player 1 name [player1]: ")
+        name = "player1" if name == "" else name # set the default if neccessary
+
+        sign = input("Please enter player sign [X]: ")
+        sign = "X" if sign == "" else sign # set the default if neccessary
+
+        player1 = Player(name, sign, turn = 1)  # to do: make the turn dynamic
+        self.player1 = player1
+
+        # Second Player (another user or computer) #
+        player2 = None # initalize here so that I have it in scope later one
+        single_player_mode = input("Would you like to play against the computer (Y) or another player (N) [Default: Y]: ")
+        if single_player_mode.upper() == "Y" or single_player_mode == "":
+            comptuer_sign = "X" if player1.sign == "O" else "O"
+
+            computer_level = input("Please enter the computer's level (easy, medium, hard) [easy]: ")
+            computer_level = "easy" if computer_level == "" else computer_level
+
+            player2 = ComputerPlayer("Computer", comptuer_sign, 2, computer_level)
+        elif single_player_mode == "N":
+            # create a second player object
+            name = input("Please enter player 2 name [player2]: ")
+            name = "player2" if name == "" else name # set the default if neccessary
+
+            sign = input("Please enter player sign [O]: ")
+            sign = "O" if sign == "" else sign # set the default if neccessary
+
+            # to do: make sure that the signs from players one and two are different
+
+            player2 = Player(name, sign, turn = 2)  # to do: make the turn dynamic
+        else:
+            print("bad input")
+
+        self.player2 = player2
+
+
     def play(self):
+        # Get the information and build player 1
+        self.initalize_players()
+        player1 = self.player1
+        player2 = self.player2
+
+        # To Do: determine the order
+
         self.board.display()
 
         while not self.victory:
+            # remember I need to make these turns a little more flexible
+            sign = None
             if ( self.turn % 2 == 0 ):
-                sign = "X"
-                self.computer_move()
+                sign = player2.sign
+                player2.move(self.board)
             else:
-                sign = "O"
-                self.user_move()
+                sign = player1.sign
+                player1.move(self.board)
                 
             # display the board
             self.board.display()
@@ -89,19 +115,19 @@ class TicTacToe:
             self.victory = self.check_victory(sign)
             
             # check for draw
-            if ( self.turn >= 8 and not self.victory):
+            if ( self.turn >= 9 and not self.victory):
                 break # break out of the game without a victor
 
             if not self.victory:
                 self.turn += 1 # go to the next turn 
                 
         # finish the game
-        if ( self.turn >= 8 and not self.victory):
+        if ( self.turn >= 9 and not self.victory):
             print("Gamve Over -- Tie!")
         elif ( self.turn % 2 == 0 ):
-            print("Game Over -- You Lose!")
+            print("Game Over -- " + self.player2.name + " Wins!")
         else: 
-            print("Game Over -- You Win!")
+            print("Game Over -- " + self.player1.name + " Wins!")
 
 if __name__ == "__main__":
     game = TicTacToe()
