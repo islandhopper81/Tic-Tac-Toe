@@ -33,7 +33,7 @@ class Board:
         free_squares = []
         for r in range(0,len(board)):
             for c in range(0,len(board[r])):
-                if board[r][c] == "X" or board[r][c] == "O":
+                if board[r][c] == "X" or board[r][c] == "O":  
                     continue
                 free_squares.append(self.coords_to_index(r,c))
         

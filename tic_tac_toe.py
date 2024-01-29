@@ -71,7 +71,7 @@ class TicTacToe:
             computer_level = "easy" if computer_level == "" else computer_level
 
             player2 = ComputerPlayer("Computer", comptuer_sign, 2, computer_level)
-        elif single_player_mode == "N":
+        elif single_player_mode.upper() == "N":
             # create a second player object
             name = input("Please enter player 2 name [player2]: ")
             name = "player2" if name == "" else name # set the default if neccessary
@@ -87,6 +87,13 @@ class TicTacToe:
 
         self.player2 = player2
 
+    def finish_game(self):
+        if ( self.turn >= 9 and not self.victory):
+            print("Game Over -- Tie!")
+        elif ( self.turn % 2 == 0 ):
+            print("Game Over -- " + self.player2.name + " Wins!")
+        else: 
+            print("Game Over -- " + self.player1.name + " Wins!")
 
     def play(self):
         # Get the information and build player 1
@@ -122,12 +129,7 @@ class TicTacToe:
                 self.turn += 1 # go to the next turn 
                 
         # finish the game
-        if ( self.turn >= 9 and not self.victory):
-            print("Gamve Over -- Tie!")
-        elif ( self.turn % 2 == 0 ):
-            print("Game Over -- " + self.player2.name + " Wins!")
-        else: 
-            print("Game Over -- " + self.player1.name + " Wins!")
+        self.finish_game()
 
 if __name__ == "__main__":
     game = TicTacToe()
