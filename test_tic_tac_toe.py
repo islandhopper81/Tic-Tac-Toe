@@ -63,21 +63,27 @@ def test_play_game_tie(monkeypatch, capsys):
     lines = captured.out.splitlines()  # I only really care about the last line
     assert lines[-1] == "Game Over -- Tie!"
 
-# def test_play_game_player1_wins(self):
-#     game = TicTacToe()
-#     with patch('builtins.input', side_effect=['player1', 'X', '', 'N', 'player2', 'O']):
-#         game.board.board = [['X', 'O', ' '],
-#                             [' ', 'X', 'O'],
-#                             [' ', ' ', 'X']]
-#         game.play()
-#     self.assertTrue("player1 Wins" in game.check_victory_message())
+def test_play_game_player1_wins(monkeypatch, capsys):
+    inputs = ['player1', 'X', 'N', 'player2', 'O', '1', '2', '3', '4', '5', '6', '7']
+    inputs_iter = iter(inputs)
+    monkeypatch.setattr('builtins.input', lambda _: next(inputs_iter))
 
-# def test_play_game_player2_wins(self):
-#     game = TicTacToe()
-#     with patch('builtins.input', side_effect=['player1', 'X', '', 'N', 'player2', 'O']):
-#         game.board.board = [['O', 'X', ' '],
-#                             ['O', 'X', ' '],
-#                             ['O', ' ', 'X']]
-#         game.play()
-#     self.assertTrue("player2 Wins" in game.check_victory_message())
+    game = TicTacToe()
+    game.play()
+
+    captured = capsys.readouterr()
+    lines = captured.out.splitlines()
+    assert lines[-1] == "Game Over -- player1 Wins!"
+
+def test_play_game_player2_wins(monkeypatch, capsys):
+    inputs = ['player1', 'X', 'N', 'player2', 'O', '2', '1', '3', '4', '5', '7']
+    inputs_iter = iter(inputs)
+    monkeypatch.setattr('builtins.input', lambda _: next(inputs_iter))
+
+    game = TicTacToe()
+    game.play()
+
+    captured = capsys.readouterr()
+    lines = captured.out.splitlines()
+    assert lines[-1] == "Game Over -- player2 Wins!"
 
