@@ -5,18 +5,18 @@ This repository is an implementation of the game Tic-Tac-Toe.  It is primarily m
 [x] Unit testing
 [x] Exception handling
 [x] Simple object oriented design
-    [X] Classes
-    [X] Objects
-    [X] Encapsulation
-    [X] Inheritance
-    [X] Method Overriding
+    [x] Classes
+    [x] Objects
+    [x] Encapsulation
+    [x] Inheritance
+    [x] Method Overriding
 [x] Gitflow
 
 ## Concepts Coming Soon
-[] Linting
-[] Python Packages
-[] Containerization
-[] CI/CD
+[ ] Linting
+[ ] Python Packages
+[ ] Containerization
+[ ] CI/CD
 
 ## Concepts in other Repos
 - Advanced Object Oriented Design
