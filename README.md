@@ -18,17 +18,6 @@ This repository is an implementation of the game Tic-Tac-Toe.  It is primarily m
 - [ ] Containerization
 - [ ] CI/CD
 
-## test
-- [ ] Mercury
-- [x] Venus
-- [x] Earth (Orbit/Moon)
-- [x] Mars
-- [ ] Jupiter
-- [ ] Saturn
-- [ ] Uranus
-- [ ] Neptune
-- [ ] Comet Haley
-
 ## Concepts in other Repos
 - Advanced Object Oriented Design
     - Polymorphism
