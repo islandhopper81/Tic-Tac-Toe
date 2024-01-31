@@ -3,7 +3,9 @@ from tic_tac_toe import TicTacToe
 
 @pytest.mark.parametrize("inputs, expected_name, expected_sign, expected_level", [
     (['', '', '', ''], 'Computer', 'O', 'easy'),
-    (['player1', 'X', 'N', 'player2', 'O'], 'player2', 'O', None)
+    (['', '', "C", ''], 'Computer', 'O', 'easy'),
+    (['', '', "C", "easy"], 'Computer', 'O', 'easy'),
+    (['player1', 'X', 'P', 'player2', 'O'], 'player2', 'O', None)
 ])
 def test_initialize_players(inputs, expected_name, expected_sign, expected_level, monkeypatch, capsys):
     inputs_iter = iter(inputs)
@@ -52,7 +54,7 @@ def test_check_victory_rev_diagonal():
     assert result
 
 def test_play_game_tie(monkeypatch, capsys):
-    inputs = ['player1', 'X', 'N', 'player2', 'O', '1', '2', '3', '5', '4', '6', '8', '7', '9']
+    inputs = ['player1', 'X', 'P', 'player2', 'O', '1', '2', '3', '5', '4', '6', '8', '7', '9']
     inputs_iter = iter(inputs)
     monkeypatch.setattr('builtins.input', lambda _: next(inputs_iter))
 
@@ -64,7 +66,7 @@ def test_play_game_tie(monkeypatch, capsys):
     assert lines[-1] == "Game Over -- Tie!"
 
 def test_play_game_player1_wins(monkeypatch, capsys):
-    inputs = ['player1', 'X', 'N', 'player2', 'O', '1', '2', '3', '4', '5', '6', '7']
+    inputs = ['player1', 'X', 'P', 'player2', 'O', '1', '2', '3', '4', '5', '6', '7']
     inputs_iter = iter(inputs)
     monkeypatch.setattr('builtins.input', lambda _: next(inputs_iter))
 
@@ -76,7 +78,7 @@ def test_play_game_player1_wins(monkeypatch, capsys):
     assert lines[-1] == "Game Over -- player1 Wins!"
 
 def test_play_game_player2_wins(monkeypatch, capsys):
-    inputs = ['player1', 'X', 'N', 'player2', 'O', '2', '1', '3', '4', '5', '7']
+    inputs = ['player1', 'X', 'P', 'player2', 'O', '2', '1', '3', '4', '5', '7']
     inputs_iter = iter(inputs)
     monkeypatch.setattr('builtins.input', lambda _: next(inputs_iter))
 
