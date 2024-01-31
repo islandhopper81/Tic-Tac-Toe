@@ -1,11 +1,16 @@
+from board import Board
+
 class Player:
-    def __init__(self, name=None, sign=None, turn=None):
+    def __init__(self, name=None, sign=None, turn=None):  
         self.name = name
         self.sign = sign
         self.wins = 0
         self.turn = turn
 
     def move(self, board):
+        if not isinstance(board, Board):
+            raise ValueError("Trying to move pieces on something that is not a board")
+        
         free_cells = board.make_list_of_free_cells()
         cell_index = int(input(f"{self.name}, enter your move: "))
 

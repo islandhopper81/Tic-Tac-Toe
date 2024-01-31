@@ -8,6 +8,22 @@ def player_instance():
     # Fixture to create a Player instance for testing
     return Player(name="TestPlayer", sign="X", turn=0)
 
+@pytest.mark.parametrize(
+    "name, sign, turn, expected_exception, error_message",
+    [
+        ("Player 1", "X", 1, None, None),  # Valid case
+    ]
+)
+def test_player_creation(name, sign, turn, expected_exception, error_message):
+    if expected_exception:
+        with pytest.raises(expected_exception, match=error_message):
+            player = Player(name, sign, turn)
+    else:
+        player = Player(name, sign, turn)
+        assert player.name == name
+        assert player.sign == sign
+        assert player.turn == turn
+
 def test_move_valid_input(player_instance, mocker):
     # Mocking input for valid moves
     test_board = Board()

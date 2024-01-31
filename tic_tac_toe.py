@@ -1,6 +1,7 @@
 from board import Board
 from player import Player
 from computer_player import ComputerPlayer
+from input_validator import InputValidator
 import random
 
 class TicTacToe:
@@ -49,43 +50,82 @@ class TicTacToe:
         
         return False
 
+
+    def create_human_player(self, default_name, default_sign, turn, used_signs=None):
+        # get the users name
+        name = input("Please enter player name [" + default_name + "]: ")
+        name = default_name if name == "" else name # set default if necessary
+
+        # get the users sign
+        sign = None
+        while sign is None:
+            sign = input("Please enter " + name + "'s sign [" + default_sign + "]: ")
+            sign = default_sign if sign == "" else sign # set default if necessary
+            try: 
+                sign = InputValidator.validate_sign(sign, used_signs)
+            except ValueError as e:   
+                print(f"Error: {e}. Please enter a different sign.")
+                sign = None
+
+        
+        player = Player(name=name, sign=sign, turn= turn)
+        return(player)
+
+    
+    def create_computer_player(self, used_signs=None):
+        name = "Computer"
+        sign = "O" if "X" in used_signs else "O"
+        turn = 2
+
+        # get the level of difficulty
+        level = None
+        while level is None:
+            level = input("What level of difficulty would you prefer: easy, medium, hard [easy]: ")
+            level = "easy" if level == "" else level # set default if necessary
+            try:
+                level = InputValidator.validate_level(level)
+            except ValueError as e:
+                print(f"Error: {e}. Please enter a valid level.")
+                level = None
+
+        player = ComputerPlayer(name, sign, turn, level)
+        return(player)
+
+
+    def get_game_mode(self):
+        single_player_mode = True
+        game_mode = None
+        while game_mode is None:
+            game_mode = input("Would you like to play against the computer (C) or another player (P) [Default: C]: ")
+            game_mode = "C" if game_mode == "" else game_mode # set default if necessary
+            game_mode = game_mode.upper()
+            
+            try:
+                game_mode = InputValidator.validate_game_mode(game_mode)
+            except ValueError as e:
+                print(f"Error {e}. Please enter a valid mode.")
+                game_mode = None
+            
+            if game_mode == "P":
+                single_player_mode = False
+                
+        return(single_player_mode)
+
     
     def initalize_players(self):
         # First Player (always the user) #
-        name = input("Please enter player 1 name [player1]: ")
-        name = "player1" if name == "" else name # set the default if neccessary
+        self.player1 = self.create_human_player("player1", "X", 1, [])
 
-        sign = input("Please enter player sign [X]: ")
-        sign = "X" if sign == "" else sign # set the default if neccessary
+        # Get the game mode.  Users can either play against the computer or another user.
+        # When playing against the computer the get_game_mode will return True
+        single_player_mode = self.get_game_mode()        
 
-        player1 = Player(name, sign, turn = 1)  # to do: make the turn dynamic
-        self.player1 = player1
-
-        # Second Player (another user or computer) #
-        player2 = None # initalize here so that I have it in scope later one
-        single_player_mode = input("Would you like to play against the computer (Y) or another player (N) [Default: Y]: ")
-        if single_player_mode.upper() == "Y" or single_player_mode == "":
-            comptuer_sign = "X" if player1.sign == "O" else "O"
-
-            computer_level = input("Please enter the computer's level (easy, medium, hard) [easy]: ")
-            computer_level = "easy" if computer_level == "" else computer_level
-
-            player2 = ComputerPlayer("Computer", comptuer_sign, 2, computer_level)
-        elif single_player_mode.upper() == "N":
-            # create a second player object
-            name = input("Please enter player 2 name [player2]: ")
-            name = "player2" if name == "" else name # set the default if neccessary
-
-            sign = input("Please enter player sign [O]: ")
-            sign = "O" if sign == "" else sign # set the default if neccessary
-
-            # to do: make sure that the signs from players one and two are different
-
-            player2 = Player(name, sign, turn = 2)  # to do: make the turn dynamic
+        # set up the second player -- computer or another user
+        if single_player_mode:
+            self.player2 = self.create_computer_player([self.player1.sign])
         else:
-            print("bad input")
+            self.player2 = self.create_human_player("player2", "O", 2, [self.player1.sign])
 
-        self.player2 = player2
 
     def finish_game(self):
         if ( self.turn >= 9 and not self.victory):
@@ -95,13 +135,14 @@ class TicTacToe:
         else: 
             print("Game Over -- " + self.player1.name + " Wins!")
 
+
     def play(self):
         # Get the information and build player 1
         self.initalize_players()
         player1 = self.player1
         player2 = self.player2
 
-        # To Do: determine the order
+        # To Do: determine the turn order
 
         self.board.display()
 
